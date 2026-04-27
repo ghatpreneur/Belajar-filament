@@ -48,6 +48,7 @@ class CustomerResource extends Resource
                     ->searchable()
                     ->label('Alamat'),
                 TextColumn::make('kode_customer')
+                    ->copyable()
                     ->label('Kode'),
                 TextColumn::make('alamat_customer')
                     ->label('Alamat'),
