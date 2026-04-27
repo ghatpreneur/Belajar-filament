@@ -24,19 +24,19 @@ class CustomerResource extends Resource
         return $form
             ->schema([
                 TextInput::make('nama_customer')
-                ->required()
-                ->label('Nama')
-                ->placeholder('Masukan Nama Customer...'),
+                    ->required()
+                    ->label('Nama')
+                    ->placeholder('Masukan Nama Customer...'),
                 TextInput::make('kode_customer')
-                ->required()
-                ->numeric()
-                ->label('Kode'),
+                    ->required()
+                    ->numeric()
+                    ->label('Kode'),
                 TextInput::make('alamat_customer')
-                ->required()
-                ->label('Alamat'),
+                    ->required()
+                    ->label('Alamat'),
                 TextInput::make('telepon_customer')
-                ->required()
-                ->label('Telepon')
+                    ->required()
+                    ->label('Telepon')
             ]);
     }
 
@@ -44,14 +44,15 @@ class CustomerResource extends Resource
     {
         return $table
             ->columns([
-               TextColumn::make('nama_customer')
-               ->label('Alamat'),
-               TextColumn::make('kode_customer')
-               ->label('Kode'),
-               TextColumn::make('alamat_customer')
-               ->label('Alamat'),
-               TextColumn::make('telepon_customer')
-               ->label('Telepon')
+                TextColumn::make('nama_customer')
+                    ->searchable()
+                    ->label('Alamat'),
+                TextColumn::make('kode_customer')
+                    ->label('Kode'),
+                TextColumn::make('alamat_customer')
+                    ->label('Alamat'),
+                TextColumn::make('telepon_customer')
+                    ->label('Telepon')
             ])
             ->filters([
                 //
