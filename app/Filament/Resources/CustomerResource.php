@@ -17,8 +17,13 @@ class CustomerResource extends Resource
 {
     protected static ?string $model = CustomerModel::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user';
+    protected static ?string $navigationLabel = 'Kelola Customer';
+    protected static ?string $slug = 'Kelola-Customer';
+    protected static ?string $navigationGroup = 'Kelola';
 
+    public static ?string $label = "Kelola Customer";
+    
     public static function form(Form $form): Form
     {
         return $form
@@ -46,9 +51,11 @@ class CustomerResource extends Resource
             ->columns([
                 TextColumn::make('nama_customer')
                     ->searchable()
+                    ->sortable()
                     ->label('Alamat'),
                 TextColumn::make('kode_customer')
                     ->copyable()
+                    ->copyMessage("Berhasil Menyalin")
                     ->label('Kode'),
                 TextColumn::make('alamat_customer')
                     ->label('Alamat'),
