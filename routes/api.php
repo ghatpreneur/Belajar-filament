@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,4 +29,18 @@ Route::post('/tes-upload', function (Request $request) {
 
 Route::get('/tes-glitchtip', function () {
     throw new Exception('Aplikasi meledak, tes GlitchTip!');
+});
+
+Route::get('/tes-glitchtip', function () {
+    try {
+        throw new Exception('Aplikasi meledak, tes GlitchTip!');
+    } catch (\Throwable $e) {
+        // Kirim error secara manual ke GlitchTip/Sentry
+        \Sentry\captureException($e);
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Error berhasil ditangkap dan dikirim ke GlitchTip!'
+        ]);
+    }
 });
