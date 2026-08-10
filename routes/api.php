@@ -25,3 +25,7 @@ Route::post('/tes-upload', function (Request $request) {
         'file_diterima' => $request->hasFile('foto') ? $request->file('foto')->getClientOriginalName() : 'Gak ada file',
     ]);
 });
+
+Route::get('/tes-glitchtip', function () {
+    throw new Exception('Aplikasi meledak, tes GlitchTip!');
+});
