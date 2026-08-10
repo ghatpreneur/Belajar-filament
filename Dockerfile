@@ -1,40 +1,21 @@
 FROM serversideup/php:8.2-fpm-nginx
 
-COPY --chown=webuser:webuser . /var/www/html
+# 1. Switch ke root untuk atur izin folder & install composer
+USER root
 
-# Install system dependencies & PHP extensions
-RUN apt-get update && apt-get install -y \
-    git curl libpng-dev libonig-dev libxml2-dev zip unzip nginx \
-    libzip-dev libicu-dev \
-    && docker-php-ext-configure intl \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl
+# 2. Set folder kerja sesuai standar serversideup
+WORKDIR /var/www/html
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# 3. Copy semua file project
+COPY --chown=www-data:www-data . .
 
-WORKDIR /var/www
+# 4. Install dependency Composer & upgrade Filament
+RUN composer install --no-dev --optimize-autoloader \
+    && php artisan filament:upgrade
 
-COPY . .
+# 5. Pastikan permission folder storage & cache aman
+RUN chmod -R 775 storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
 
-RUN composer install --no-dev --optimize-autoloader
-RUN php artisan filament:upgrade
-
-# Copy Nginx Config
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-
-# Nginx Configuration
-RUN echo 'server { \
-    listen 80; \
-    root /var/www/public; \
-    index index.php; \
-    location / { try_files $uri $uri/ /index.php?$query_string; } \
-    location ~ \.php$ { \
-        fastcgi_pass 127.0.0.1:9000; \
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name; \
-        include fastcgi_params; \
-    } \
-}' > /etc/nginx/sites-available/default
-
-EXPOSE 80
-
-CMD service nginx start && php-fpm
+# 6. Kembalikan ke user non-root demi keamanan
+USER www-data
