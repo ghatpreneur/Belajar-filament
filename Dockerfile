@@ -1,5 +1,7 @@
 FROM serversideup/php:8.2-fpm-nginx
 
+COPY --chown=webuser:webuser . /var/www/html
+
 # Install system dependencies & PHP extensions
 RUN apt-get update && apt-get install -y \
     git curl libpng-dev libonig-dev libxml2-dev zip unzip nginx \
